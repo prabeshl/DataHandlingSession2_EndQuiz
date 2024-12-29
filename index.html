@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,26 +69,75 @@
     <script>
         const quizQuestions = [
             {
-                question: "What is the purpose of a return statement in a function?",
-                options: ["Terminate a function", "Return a value to the caller", "Print a message", "None of the above"],
-                answer: "Return a value to the caller"
+                "question": "What is the purpose of a return statement in a function?",
+                "options": ["Terminate a function", "Return a value to the caller", "Print a message", "None of the above"],
+                "answer": "Return a value to the caller"
             },
             {
-                question: "Which of these is a correct function definition in Python?",
-                options: [
+                "question": "Which of these is a correct function definition in Python?",
+                "options": [
                     "def my_function: return 5",
                     "def my_function(): return 5",
                     "function my_function(): return 5",
                     "function my_function: return 5"
                 ],
-                answer: "def my_function(): return 5"
+                "answer": "def my_function(): return 5"
             },
             {
-                question: "What does the following code do?\ndef add(a, b):\n    return a + b",
-                options: ["Adds two numbers", "Subtracts two numbers", "Multiplies two numbers", "None of the above"],
-                answer: "Adds two numbers"
+                "question": "What does the following code do?\ndef add(a, b):\n    return a + b",
+                "options": ["Adds two numbers", "Subtracts two numbers", "Multiplies two numbers", "None of the above"],
+                "answer": "Adds two numbers"
             },
-            // Additional questions...
+            {
+                "question": "Which pandas method is used to filter rows by condition?",
+                "options": ["df.loc[]", "df.filter()", "df.query()", "df.drop()"],
+                "answer": "df.loc[]"
+            },
+            {
+                "question": "What does df.head() do in pandas?",
+                "options": ["Displays the first n rows", "Displays the last n rows", "Sorts the rows", "Drops missing values"],
+                "answer": "Displays the first n rows"
+            },
+            {
+                "question": "What method is used to select specific columns in pandas?",
+                "options": ["df[['col1', 'col2']]", "df.select('col1', 'col2')", "df.choose(['col1', 'col2'])", "df.columns('col1', 'col2')"],
+                "answer": "df[['col1', 'col2']]"
+            },
+            {
+                "question": "What function checks for missing values in a DataFrame?",
+                "options": ["df.isnull()", "df.notnull()", "df.checknull()", "df.isnan()"],
+                "answer": "df.isnull()"
+            },
+            {
+                "question": "Which method is used to fill missing values in pandas?",
+                "options": ["df.fillna()", "df.dropna()", "df.impute()", "df.fill()"],
+                "answer": "df.fillna()"
+            },
+            {
+                "question": "What is the first step when handling missing data?",
+                "options": ["Identify missing data", "Fill missing values", "Drop missing rows", "Replace missing values with zero"],
+                "answer": "Identify missing data"
+            },
+            {
+                "question": "What does the following function return?\ndef square(x):\n    return x * x\n\nprint(square(4))",
+                "options": ["16", "8", "4", "Error"],
+                "answer": "16"
+            },
+            {
+                "question": "Which of the following filters rows where column 'A' is greater than 10?",
+                "options": [
+                    "df[df['A'] > 10]",
+                    "df.loc[df['A'] > 10]",
+                    "df.query('A > 10')",
+                    "All of the above"
+                ],
+                "answer": "All of the above"
+            },
+            {
+                "question": "What does df.dropna() do?",
+                "options": ["Removes missing values", "Fills missing values", "Imputes missing values", "Checks for missing values"],
+                "answer": "Removes missing values"
+            }
         ];
 
         let currentQuestionIndex = 0;
