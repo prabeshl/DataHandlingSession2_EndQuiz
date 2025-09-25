@@ -3,157 +3,524 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Quiz</title>
+    <title>PrabeshQuiz</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            color: #333;
+            line-height: 1.5;
         }
+        
         .quiz-container {
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            max-width: 700px;
             width: 100%;
+            transition: all 0.3s ease;
         }
+        
         .question {
-            font-size: 18px;
+            font-size: clamp(18px, 4vw, 22px);
             margin-bottom: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.4;
         }
+        
         .options {
             list-style-type: none;
             padding: 0;
         }
+        
         .options li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            border: 1px solid #e0e0e0;
         }
+        
+        .options li:hover {
+            background-color: #f5f9ff;
+        }
+        
+        .options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: clamp(16px, 3.5vw, 18px);
+        }
+        
         .options input {
-            margin-right: 10px;
+            margin-right: 12px;
+            transform: scale(1.2);
+            min-width: 18px;
         }
+        
         .btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
+            font-weight: 600;
             color: #fff;
-            background-color: #007BFF;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+            width: 100%;
+            max-width: 200px;
         }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(106, 17, 203, 0.4);
+        }
+        
         .btn:disabled {
-            background-color: #ccc;
+            background: #bdc3c7;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
+        
         .score {
-            font-size: 20px;
+            font-size: clamp(20px, 5vw, 24px);
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .feedback-container {
+            margin-top: 25px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+        }
+        
+        .feedback-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: clamp(16px, 3.5vw, 18px);
+        }
+        
+        .feedback-answer {
+            display: flex;
+            flex-direction: column;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .feedback-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .question-counter {
+            text-align: right;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .result-emoji {
+            font-size: clamp(30px, 8vw, 40px);
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .restart-btn {
+            display: block;
+            margin: 20px auto 0;
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            max-width: 250px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: clamp(24px, 5vw, 32px);
+        }
+        
+        .quiz-description {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
             margin-top: 20px;
+        }
+        
+        .shuffle-info {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .quiz-container {
+                padding: 20px 15px;
+                border-radius: 10px;
+            }
+            
+            .options li {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .feedback-item {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .feedback-answer {
+                padding: 8px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .quiz-container {
+                padding: 15px 10px;
+            }
+            
+            .options li {
+                padding: 8px;
+            }
+            
+            .feedback-item {
+                padding: 10px;
+            }
+            
+            .question-counter {
+                text-align: center;
+            }
+            
+            .feedback-answer {
+                flex-direction: column;
+            }
+            
+            .feedback-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* Large screen adjustments */
+        @media (min-width: 1200px) {
+            .quiz-container {
+                max-width: 800px;
+                padding: 30px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="quiz-container">
+        <h1 id="quiz-title">Quiz Title</h1>
+        <p id="quiz-description" class="quiz-description">Quiz Description</p>
+        <div class="shuffle-info">Practice is the path to excellence - every line of code moves you forward</div>
+        
+        <div class="question-counter">
+            Question <span id="current-question">1</span> of <span id="total-questions">0</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress" id="progress" style="width: 0%"></div>
+        </div>
+        
         <div id="quiz">
             <!-- Quiz content will be injected here -->
         </div>
-        <button id="next-btn" class="btn" disabled>Next</button>
+        <div class="btn-container">
+            <button id="next-btn" class="btn" disabled>Next Question</button>
+        </div>
         <div id="result" class="score"></div>
     </div>
 
     <script>
-        const quizQuestions = [
-            {
-                "question": "What is the purpose of a return statement in a function?",
-                "options": ["Terminate a function", "Return a value to the caller", "Print a message", "None of the above"],
-                "answer": "Return a value to the caller"
-            },
-            {
-                "question": "Which of these is a correct function definition in Python?",
-                "options": [
-                    "def my_function: return 5",
-                    "def my_function(): return 5",
-                    "function my_function(): return 5",
-                    "function my_function: return 5"
-                ],
-                "answer": "def my_function(): return 5"
-            },
-            {
-                "question": "What does the following code do?\ndef add(a, b):\n    return a + b",
-                "options": ["Adds two numbers", "Subtracts two numbers", "Multiplies two numbers", "None of the above"],
-                "answer": "Adds two numbers"
-            },
-            {
-                "question": "Which pandas method is used to filter rows by condition?",
-                "options": ["df.loc[]", "df.filter()", "df.query()", "df.drop()"],
-                "answer": "df.loc[]"
-            },
-            {
-                "question": "What does df.head() do in pandas?",
-                "options": ["Displays the first n rows", "Displays the last n rows", "Sorts the rows", "Drops missing values"],
-                "answer": "Displays the first n rows"
-            },
-            {
-                "question": "What method is used to select specific columns in pandas?",
-                "options": ["df[['col1', 'col2']]", "df.select('col1', 'col2')", "df.choose(['col1', 'col2'])", "df.columns('col1', 'col2')"],
-                "answer": "df[['col1', 'col2']]"
-            },
-            {
-                "question": "What function checks for missing values in a DataFrame?",
-                "options": ["df.isnull()", "df.notnull()", "df.checknull()", "df.isnan()"],
-                "answer": "df.isnull()"
-            },
-            {
-                "question": "Which method is used to fill missing values in pandas?",
-                "options": ["df.fillna()", "df.dropna()", "df.impute()", "df.fill()"],
-                "answer": "df.fillna()"
-            },
-            {
-                "question": "What is the first step when handling missing data?",
-                "options": ["Identify missing data", "Fill missing values", "Drop missing rows", "Replace missing values with zero"],
-                "answer": "Identify missing data"
-            },
-            {
-                "question": "What does the following function return?\ndef square(x):\n    return x * x\n\nprint(square(4))",
-                "options": ["16", "8", "4", "Error"],
-                "answer": "16"
-            },
-            {
-                "question": "Which of the following filters rows where column 'A' is greater than 10?",
-                "options": [
-                    "df[df['A'] > 10]",
-                    "df.loc[df['A'] > 10]",
-                    "df.query('A > 10')",
-                    "All of the above"
-                ],
-                "answer": "All of the above"
-            },
-            {
-                "question": "What does df.dropna() do?",
-                "options": ["Removes missing values", "Fills missing values", "Imputes missing values", "Checks for missing values"],
-                "answer": "Removes missing values"
-            }
-        ];
+        // ============================================
+        // QUIZ CONFIGURATION - EDIT THIS SECTION ONLY
+        // ============================================
+        const quizConfig = {
+            // Page title (shown in browser tab)
+            pageTitle: "Topic 2 Quiz",
+            
+            // Quiz title (shown on the page)
+            quizTitle: "Pandas NumPy in Action",
+            
+            // Quiz description
+            quizDescription: "Test your knowledge of Pandas and NumPy",
+            
+            // Quiz questions array
+            questions: [
+    {
+        question: "What is the purpose of a user-defined function in Python?",
+        options: [
+            "To create reusable blocks of code",
+            "To process missing values",
+            "To filter rows and columns in a DataFrame",
+            "To visualize data"
+        ],
+        answer: "To create reusable blocks of code",
+        explanation: "User-defined functions allow you to create reusable blocks of code that can be called multiple times with different inputs."
+    },
+    {
+        question: "Which of the following is a valid way to call a function in Python?",
+        options: [
+            "function name",
+            "function name()",
+            "call function name()",
+            "None of the above"
+        ],
+        answer: "None of the above",
+        explanation: "The correct way to call a function in Python is by using its name followed by parentheses, like function_name()."
+    },
+    {
+        question: "What method is used to filter rows in a DataFrame based on a condition?",
+        options: [
+            "df.isnull()",
+            "df.filter()",
+            "df.loc[condition]",
+            "df.fillna()"
+        ],
+        answer: "df.loc[condition]",
+        explanation: "The df.loc[] method is used to filter rows based on a condition in a pandas DataFrame."
+    },
+    {
+        question: "How can you check for missing values in a DataFrame?",
+        options: [
+            "df.isnull()",
+            "df.describe()",
+            "df.dropna()",
+            "df.mean()"
+        ],
+        answer: "df.isnull()",
+        explanation: "The df.isnull() method returns a DataFrame of the same shape with True where values are missing and False otherwise."
+    },
+    {
+        question: "What is the first step when handling missing values in a dataset?",
+        options: [
+            "Delete rows with missing values",
+            "Identify the missing data",
+            "Replace missing values with the mean",
+            "Ignore the missing values"
+        ],
+        answer: "Identify the missing data",
+        explanation: "The first step in handling missing values is always to identify where and how much data is missing using methods like df.isnull().sum()."
+    },
+    {
+        question: "What is the purpose of a return statement in a function?",
+        options: ["Terminate a function", "Return a value to the caller", "Print a message", "None of the above"],
+        answer: "Return a value to the caller",
+        explanation: "The return statement sends a value back to the code that called the function, allowing the function to produce output."
+    },
+    {
+        question: "Which of these is a correct function definition in Python?",
+        options: [
+            "def my_function: return 5",
+            "def my_function(): return 5",
+            "function my_function(): return 5",
+            "function my_function: return 5"
+        ],
+        answer: "def my_function(): return 5",
+        explanation: "Python function definitions use the 'def' keyword followed by the function name, parentheses, and a colon."
+    },
+    {
+        question: "What does the following code do?<br><br><pre style='font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px; white-space: pre-wrap;'>def add(a, b):\n    return a + b</pre>",
+        options: ["Adds two numbers", "Subtracts two numbers", "Multiplies two numbers", "None of the above"],
+        answer: "Adds two numbers",
+        explanation: "The function takes two parameters (a and b) and returns their sum using the + operator."
+    },
+    {
+        question: "Which pandas method is used to filter rows by condition?",
+        options: ["df.loc[]", "df.filter()", "df.query()", "df.drop()"],
+        answer: "df.loc[]",
+        explanation: "df.loc[] is primarily used for label-based indexing but can also filter rows using boolean conditions."
+    },
+    {
+        question: "What does df.head() do in pandas?",
+        options: ["Displays the first n rows", "Displays the last n rows", "Sorts the rows", "Drops missing values"],
+        answer: "Displays the first n rows",
+        explanation: "By default, df.head() shows the first 5 rows, but you can specify a different number as an argument."
+    },
+    {
+        question: "What method is used to select specific columns in pandas?",
+        options: ["df[['col1', 'col2']]", "df.select('col1', 'col2')", "df.choose(['col1', 'col2'])", "df.columns('col1', 'col2')"],
+        answer: "df[['col1', 'col2']]",
+        explanation: "Using double brackets df[['col1', 'col2']] is the standard way to select multiple specific columns from a DataFrame."
+    },
+    {
+        question: "What function checks for missing values in a DataFrame?",
+        options: ["df.isnull()", "df.notnull()", "df.checknull()", "df.isnan()"],
+        answer: "df.isnull()",
+        explanation: "df.isnull() returns a DataFrame of the same shape with True where values are missing (NaN or None) and False otherwise."
+    },
+    {
+        question: "Which method is used to fill missing values in pandas?",
+        options: ["df.fillna()", "df.dropna()", "df.impute()", "df.fill()"],
+        answer: "df.fillna()",
+        explanation: "df.fillna() replaces missing values with a specified value or using methods like forward fill or backward fill."
+    },
+    {
+        question: "What is the first step when handling missing data?",
+        options: ["Identify missing data", "Fill missing values", "Drop missing rows", "Replace missing values with zero"],
+        answer: "Identify missing data",
+        explanation: "Before handling missing data, you must first identify where and how much data is missing using methods like df.isnull().sum()."
+    },
+    {
+        question: "What does the following function return?<br><br><pre style='font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px; white-space: pre-wrap;'>def square(x):\n    return x * x\n\nprint(square(4))</pre>",
+        options: ["16", "8", "4", "Error"],
+        answer: "16",
+        explanation: "The square function multiplies the input by itself, so square(4) returns 4 * 4 = 16."
+    },
+    {
+        question: "Which of the following filters rows where column 'A' is greater than 10?",
+        options: [
+            "df[df['A'] > 10]",
+            "df.loc[df['A'] > 10]",
+            "df.query('A > 10')",
+            "All of the above"
+        ],
+        answer: "All of the above",
+        explanation: "All three methods are valid ways to filter rows in pandas based on a condition. They achieve the same result using different syntax."
+    },
+    {
+        question: "What does df.dropna() do?",
+        options: ["Removes missing values", "Fills missing values", "Imputes missing values", "Checks for missing values"],
+        answer: "Removes missing values",
+        explanation: "df.dropna() removes rows or columns containing missing values from the DataFrame entirely."
+    }
+]
+        };
+        // ============================================
+        // DO NOT EDIT
+        // ============================================
 
+        // Shuffle helper function
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Set page title
+        document.title = quizConfig.pageTitle;
+        
+        // Set quiz title and description
+        document.getElementById('quiz-title').textContent = quizConfig.quizTitle;
+        document.getElementById('quiz-description').textContent = quizConfig.quizDescription;
+
+        // Quiz variables
         let currentQuestionIndex = 0;
         let score = 0;
+        let userAnswers = [];
 
+        // DOM elements
         const quizContainer = document.getElementById('quiz');
         const nextButton = document.getElementById('next-btn');
         const resultContainer = document.getElementById('result');
+        const currentQuestionElement = document.getElementById('current-question');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const progressElement = document.getElementById('progress');
 
+        // Initialize total questions display
+        totalQuestionsElement.textContent = quizConfig.questions.length;
+
+        // Shuffle questions initially
+        shuffleArray(quizConfig.questions);
+
+        // Display the current question with shuffled options
         function displayQuestion() {
-            const question = quizQuestions[currentQuestionIndex];
+            const question = quizConfig.questions[currentQuestionIndex];
+            currentQuestionElement.textContent = currentQuestionIndex + 1;
+            
+            // Update progress bar
+            const progressPercentage = ((currentQuestionIndex + 1) / quizConfig.questions.length) * 100;
+            progressElement.style.width = `${progressPercentage}%`;
+
+            // Shuffle the options for this question
+            const shuffledOptions = shuffleArray([...question.options]);
 
             quizContainer.innerHTML = `
-                <div class="question">${currentQuestionIndex + 1}. ${question.question}</div>
+                <div class="question">${question.question}</div>
                 <ul class="options">
-                    ${question.options
+                    ${shuffledOptions
                         .map(
                             (option, index) => `
                                 <li>
@@ -177,27 +544,91 @@
             });
         }
 
+        // Show results with detailed feedback
         function showResult() {
             quizContainer.style.display = 'none';
             nextButton.style.display = 'none';
-            resultContainer.innerHTML = `🎯 Quiz Completed! Your score is: ${score}/${quizQuestions.length}`;
-            if (score === quizQuestions.length) {
-                resultContainer.innerHTML += '<br>🏆 Congratulations! You are a Quiz Master!';
-            } else if (score >= quizQuestions.length / 2) {
-                resultContainer.innerHTML += '<br>🎖️ Well done! Keep it up!';
-            } else {
-                resultContainer.innerHTML += '<br>💪 Keep practicing to improve!';
+            
+            // Determine emoji based on score
+            let emoji = "😞";
+            let message = "Keep practicing to improve!";
+            
+            if (score === quizConfig.questions.length) {
+                emoji = "🏆";
+                message = "Congratulations! You are a Quiz Master!";
+            } else if (score >= quizConfig.questions.length / 2) {
+                emoji = "🎉";
+                message = "Well done! Keep it up!";
             }
+            
+            resultContainer.innerHTML = `
+                <div class="result-emoji">${emoji}</div>
+                <div class="score">Your score: ${score}/${quizConfig.questions.length}</div>
+                <div style="text-align: center; margin-bottom: 20px; font-size: clamp(16px, 3.5vw, 18px);">${message}</div>
+                <div class="feedback-container">
+                    <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px; font-size: clamp(18px, 4vw, 22px);">Detailed Feedback</h2>
+                    ${userAnswers.map((item, index) => {
+                        const isCorrect = item.userAnswer === item.correctAnswer;
+                        return `
+                            <div class="feedback-item">
+                                <div class="feedback-question">${index + 1}. ${item.question}</div>
+                                <div class="feedback-answer ${isCorrect ? 'correct' : 'incorrect'}">
+                                    <span class="feedback-label">Your answer:</span> ${item.userAnswer || "Not answered"}
+                                </div>
+                                <div class="feedback-answer correct">
+                                    <span class="feedback-label">Correct answer:</span> ${item.correctAnswer}
+                                </div>
+                                <div style="margin-top: 10px; font-style: italic; color: #7f8c8d; font-size: clamp(14px, 3vw, 16px);"> Explanation: ${item.explanation}</div>
+
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="btn-container">
+                    <button id="restart-btn" class="btn restart-btn">Take Quiz Again</button>
+                </div>
+            `;
+            
+            // Add event listener for restart button
+            document.getElementById('restart-btn').addEventListener('click', restartQuiz);
         }
 
+        // Restart the quiz with new randomization
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            // Reshuffle questions for a new order
+            shuffleArray(quizConfig.questions);
+            
+            quizContainer.style.display = 'block';
+            nextButton.style.display = 'inline-block';
+            resultContainer.innerHTML = '';
+            displayQuestion();
+        }
+
+        // Next button event listener
         nextButton.addEventListener('click', () => {
             const selectedOption = document.querySelector('input[name="option"]:checked');
-            if (selectedOption.value === quizQuestions[currentQuestionIndex].answer) {
+            const userAnswer = selectedOption ? selectedOption.value : null;
+            const correctAnswer = quizConfig.questions[currentQuestionIndex].answer;
+            const explanation = quizConfig.questions[currentQuestionIndex].explanation;
+            
+            // Store user's answer and correct answer
+            userAnswers.push({
+                question: quizConfig.questions[currentQuestionIndex].question,
+                userAnswer: userAnswer,
+                correctAnswer: correctAnswer,
+                explanation: explanation
+            });
+            
+            if (userAnswer === correctAnswer) {
                 score++;
             }
 
             currentQuestionIndex++;
-            if (currentQuestionIndex < quizQuestions.length) {
+            if (currentQuestionIndex < quizConfig.questions.length) {
                 displayQuestion();
             } else {
                 showResult();
